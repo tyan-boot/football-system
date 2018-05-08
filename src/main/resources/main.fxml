@@ -1,11 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import cn.edu.ncu.football.controller.Main?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121"
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<AnchorPane prefHeight="645.0" prefWidth="887.0" xmlns="http://javafx.com/javafx/8.0.161"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="cn.edu.ncu.football.controller.Main">
-    <Button fx:id="button" layoutX="182.0" layoutY="149.0" mnemonicParsing="false" onAction="#handlerClick"
-            text="Button"/>
+    <TabPane layoutX="14.0" layoutY="45.0" prefHeight="576.0" prefWidth="796.0" tabClosingPolicy="UNAVAILABLE"
+             AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0"
+             AnchorPane.topAnchor="16.0">
+        <Tab text="Play Info">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="190.0" prefWidth="216.0">
+                <TableView fx:id="playerTableView" prefHeight="518.0" prefWidth="770.0" AnchorPane.bottomAnchor="40.0"
+                           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <columns>
+                        <TableColumn prefWidth="75.0" text="ID">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="id"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <TableColumn prefWidth="75.0" text="姓名">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="name"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <TableColumn prefWidth="75.0" text="性别">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="grander"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <TableColumn prefWidth="75.0" text="球队" fx:id="teamCol">
+                        </TableColumn>
+                    </columns>
+                </TableView>
+
+                <Button text="加载球员信息" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0"
+                        onMouseClicked="#loadPlayerClick"/>
+            </AnchorPane>
+        </Tab>
+        <Tab text="Untitled Tab 2">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+        </Tab>
+    </TabPane>
 </AnchorPane>
