@@ -45,8 +45,25 @@
                         onMouseClicked="#loadPlayerClick"/>
             </AnchorPane>
         </Tab>
-        <Tab text="Untitled Tab 2">
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+        <Tab text="Team info">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <TableView fx:id="teamTableView" prefHeight="518.0" prefWidth="770.0" AnchorPane.bottomAnchor="40.0"
+                           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <columns>
+                        <TableColumn prefWidth="75.0" text="ID">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="id"/>
+                            </cellValueFactory>
+                        </TableColumn>
+
+                        <TableColumn prefWidth="75.0" text="球队名称">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="name"/>
+                            </cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                </TableView>
+            </AnchorPane>
         </Tab>
     </TabPane>
 </AnchorPane>

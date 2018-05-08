@@ -19,6 +19,9 @@ public class Main {
     public TableColumn<Player, String> teamCol;
 
     @FXML
+    public TableView teamTableView;
+
+    @FXML
     private TableView<Player> playerTableView;
 
     private final PlayerRepo repo;
@@ -51,5 +54,10 @@ public class Main {
         personIter.forEach(observableList::add);
 
         playerTableView.setItems(observableList);
+    }
+
+    @FXML
+    public void loadTeamClick(MouseEvent event) {
+        // todo : 加载队伍信息, 并显示出来
     }
 }
