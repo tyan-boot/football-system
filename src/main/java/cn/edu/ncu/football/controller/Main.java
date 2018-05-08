@@ -1,20 +1,27 @@
 package cn.edu.ncu.football.controller;
 
 import cn.edu.ncu.football.model.Player;
+import cn.edu.ncu.football.model.Team;
 import cn.edu.ncu.football.repo.PlayerRepo;
-import javafx.event.ActionEvent;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.input.MouseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class Main {
     @FXML
-    private Button button;
+    public TableColumn<Player, String> teamCol;
+
+    @FXML
+    private TableView<Player> playerTableView;
 
     private final PlayerRepo repo;
-
 
     @Autowired
     public Main(PlayerRepo repo) {
@@ -22,9 +29,27 @@ public class Main {
     }
 
     @FXML
-    public void handlerClick(ActionEvent actionEvent) {
-        Iterable<Player> person = repo.findAll();
+    public void initialize() {
+        teamCol.setCellValueFactory(cellData -> {
+            Player player = cellData.getValue();
+            Team team = player.getTeam();
 
-        person.forEach(p -> System.out.println(p.getId()));
+            if (team == null) {
+                return null;
+            } else {
+                return new SimpleStringProperty(team.getName());
+            }
+        });
+    }
+
+    @FXML
+    public void loadPlayerClick(MouseEvent actionEvent) {
+        Iterable<Player> personIter = repo.findAll();
+
+        ObservableList<Player> observableList = FXCollections.observableArrayList();
+
+        personIter.forEach(observableList::add);
+
+        playerTableView.setItems(observableList);
     }
 }
