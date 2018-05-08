@@ -26,9 +26,10 @@ public class App extends Application {
 
         Parent root = fxmlLoader.load();
 
-        Scene scene = new Scene(root, 640, 480);
+        Scene scene = new Scene(root, 1200, 480);
 
         primaryStage.setScene(scene);
+        primaryStage.setMinWidth(1200);
         primaryStage.show();
     }
 

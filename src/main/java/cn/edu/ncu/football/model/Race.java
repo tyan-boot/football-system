@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.sql.Time;
+import java.sql.Date;
 
 @Data
 @Entity
@@ -23,7 +23,7 @@ public class Race {
     @OneToOne
     private Player judge;
 
-    private Time holdTime;
+    private Date holdDate;
 
     @Convert(converter = StatusConverter.class)
     private RaceStatus status;
