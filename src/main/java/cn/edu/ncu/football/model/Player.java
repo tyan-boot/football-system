@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-public class Person {
+public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;

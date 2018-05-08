@@ -21,7 +21,7 @@ public class Race {
     private Team team2;
 
     @OneToOne
-    private Person judge;
+    private Player judge;
 
     private Time holdTime;
 
