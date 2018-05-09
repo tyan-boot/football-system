@@ -1,7 +1,9 @@
 package cn.edu.ncu.football;
 
+import cn.edu.ncu.football.controller.Main;
 import cn.edu.ncu.football.model.*;
 import cn.edu.ncu.football.repo.*;
+import javafx.application.Platform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Component
-public class FakeDataGenerator implements CommandLineRunner {
+public class FakeDataGenerator {
     private final TeamRepo teamRepo;
 
     private final PlayerRepo playerRepo;
@@ -33,6 +35,12 @@ public class FakeDataGenerator implements CommandLineRunner {
 
     private ArrayList<Place> places = new ArrayList<>();
 
+    private Main mainController;
+
+    private Double progress = 0.0;
+
+    private final Double step = 0.000062992;
+
     @Autowired
     public FakeDataGenerator(TeamRepo teamRepo, PlayerRepo playerRepo, RaceRepo raceRepo, RaceResultRepo raceResultRepo, ShotResultRepo shotResultRepo, PlaceRepo placeRepo) {
         this.teamRepo = teamRepo;
@@ -44,14 +52,24 @@ public class FakeDataGenerator implements CommandLineRunner {
         this.placeRepo = placeRepo;
     }
 
-    @Override
-    public void run(String... args) throws Exception {
+    public void run(Main mainController) throws Exception {
+        this.mainController = mainController;
+
         logger.info("Creating mock data...");
 
         long count = teamRepo.count();
 
-        if (count != 0)
+        if (count != 0) {
+            Platform.runLater(() -> {
+                mainController.progressBar.setProgress(1);
+                mainController.status.setText("初始化完成");
+            });
             return;
+        }
+
+        Platform.runLater(() -> {
+            mainController.status.setText("初始化数据库...");
+        });
 
         generateTeam();
 
@@ -61,6 +79,11 @@ public class FakeDataGenerator implements CommandLineRunner {
 
         generateRace();
 
+        Platform.runLater(() -> {
+            mainController.progressBar.setProgress(1);
+            mainController.status.setText("初始化完成");
+        });
+        
         logger.info("Data initialized.");
     }
 
@@ -70,12 +93,13 @@ public class FakeDataGenerator implements CommandLineRunner {
 
         // create team
         for (int i = 0; i < 72; ++i) {
-            logger.info("Create team {}", i);
-
             Team team = new Team();
             team.setName("Team " + i);
             team.setType(random.nextInt(4));
             teams.add(team);
+
+            progress += step;
+            mainController.progressBar.setProgress(progress);
         }
         teamRepo.saveAll(teams);
     }
@@ -87,8 +111,6 @@ public class FakeDataGenerator implements CommandLineRunner {
 
         // create player
         for (int i = 0; i < 792; ++i) {
-            logger.info("Create user {}", i);
-
             Player player = new Player();
             Team team = teams.get(i % 72);
 
@@ -96,6 +118,9 @@ public class FakeDataGenerator implements CommandLineRunner {
             player.setGrander("f");
             player.setTeam(team);
             players.add(player);
+
+            progress += step;
+            mainController.progressBar.setProgress(progress);
         }
         playerRepo.saveAll(players);
     }
@@ -107,8 +132,6 @@ public class FakeDataGenerator implements CommandLineRunner {
 
         teamRepo.findAll().forEach(teams::add);
         playerRepo.findAll().forEach(players::add);
-
-//        placeRepo.findAll().forEach(places::add);
 
         Random random = new Random();
         Calendar calendar = Calendar.getInstance();
@@ -150,6 +173,9 @@ public class FakeDataGenerator implements CommandLineRunner {
                     race.setRaceResults(raceResult);
 
                     raceRepo.save(race);
+
+                    progress += step;
+                    mainController.progressBar.setProgress(progress);
                 }
             }
         }
@@ -176,6 +202,8 @@ public class FakeDataGenerator implements CommandLineRunner {
         }
 
         raceResultRepo.save(raceResult);
+        progress += step;
+        mainController.progressBar.setProgress(progress);
 
         return raceResult;
     }
@@ -196,6 +224,9 @@ public class FakeDataGenerator implements CommandLineRunner {
             raceResults.getShotResults().add(shotResult);
 
             shotResultRepo.save(shotResult);
+
+            progress += step;
+            mainController.progressBar.setProgress(progress);
         }
 
         return totalCount;
@@ -216,6 +247,9 @@ public class FakeDataGenerator implements CommandLineRunner {
 
             places.add(place);
             placeRepo.save(place);
+
+            progress += step;
+            mainController.progressBar.setProgress(progress);
         }
     }
 }

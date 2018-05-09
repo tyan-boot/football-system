@@ -9,9 +9,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +27,12 @@ public class Main {
 
     @FXML
     public ComboBox<String> subGroupType;
+
+    @FXML
+    public ProgressBar progressBar;
+
+    @FXML
+    public Label status;
 
     @FXML
     private TableView<Player> playerTableView;
