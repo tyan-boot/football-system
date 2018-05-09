@@ -1,10 +1,13 @@
 package cn.edu.ncu.football;
 
+import cn.edu.ncu.football.controller.Main;
 import javafx.application.Application;
+import javafx.application.Preloader;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -12,6 +15,9 @@ import org.springframework.context.ConfigurableApplicationContext;
 @SpringBootApplication
 public class App extends Application {
     private ConfigurableApplicationContext applicationContext;
+
+    @Autowired
+    private FakeDataGenerator fakeDataGenerator;
 
     @Override
     public void init() {
@@ -31,6 +37,10 @@ public class App extends Application {
         primaryStage.setScene(scene);
         primaryStage.setMinWidth(1200);
         primaryStage.show();
+
+        Main main = fxmlLoader.getController();
+        MockThread mockThread = new MockThread(main);
+        mockThread.start();
     }
 
     @Override
@@ -41,5 +51,23 @@ public class App extends Application {
 
     public static void main(String[] args) {
         Application.launch(App.class, args);
+    }
+
+    class MockThread extends Thread {
+        private Main mainController;
+
+        MockThread(Main mainController) {
+            this.mainController = mainController;
+        }
+
+        @Override
+        public void run() {
+            try {
+                fakeDataGenerator.run(mainController);
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+                System.exit(-1);
+            }
+        }
     }
 }

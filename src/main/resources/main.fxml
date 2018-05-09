@@ -1,35 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import javafx.scene.layout.AnchorPane?>
-
-<AnchorPane minWidth="1200.0" prefHeight="645.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.161" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cn.edu.ncu.football.controller.Main">
-    <TabPane layoutX="14.0" layoutY="45.0" prefHeight="576.0" prefWidth="796.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="16.0">
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane minWidth="1200.0" prefHeight="645.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.161"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="cn.edu.ncu.football.controller.Main">
+    <TabPane layoutX="14.0" layoutY="45.0" prefHeight="586.0" prefWidth="1168.0" tabClosingPolicy="UNAVAILABLE"
+             AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0"
+             AnchorPane.topAnchor="16.0">
         <Tab text="射手榜">
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="190.0" prefWidth="216.0">
-                <TableView fx:id="playerTableView" prefHeight="518.0" prefWidth="770.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <TableView fx:id="playerTableView" prefHeight="518.0" prefWidth="770.0" AnchorPane.bottomAnchor="40.0"
+                           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
                         <TableColumn prefWidth="75.0" text="ID">
                             <cellValueFactory>
-                                <PropertyValueFactory property="id" />
+                                <PropertyValueFactory property="id"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="姓名">
                             <cellValueFactory>
-                                <PropertyValueFactory property="name" />
+                                <PropertyValueFactory property="name"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="性别">
                             <cellValueFactory>
-                                <PropertyValueFactory property="grander" />
+                                <PropertyValueFactory property="grander"/>
                             </cellValueFactory>
                         </TableColumn>
 
@@ -38,7 +36,8 @@
                     </columns>
                 </TableView>
 
-                <Button onMouseClicked="#loadPlayerClick" text="加载球员信息" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
+                <Button onMouseClicked="#loadPlayerClick" text="加载球员信息" AnchorPane.bottomAnchor="10.0"
+                        AnchorPane.rightAnchor="10.0"/>
             </AnchorPane>
         </Tab>
         <Tab text="球队实时积分榜">
@@ -46,102 +45,108 @@
                 <ComboBox fx:id="groupType" layoutX="14.0" layoutY="14.0" prefHeight="30.0" prefWidth="100.0">
 
                 </ComboBox>
-                <TableView fx:id="teamTableView" layoutY="63.0" prefHeight="481.0" prefWidth="855.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
+                <TableView fx:id="teamTableView" layoutY="63.0" prefHeight="481.0" prefWidth="855.0"
+                           AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                           AnchorPane.topAnchor="60.0">
                     <columns>
                         <TableColumn prefWidth="75.0" text="排名">
                             <cellValueFactory>
-                                <PropertyValueFactory property="id" />
+                                <PropertyValueFactory property="id"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="升降">
                             <cellValueFactory>
-                                <PropertyValueFactory property="name" />
+                                <PropertyValueFactory property="name"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="球队名">
                             <cellValueFactory>
-                                <PropertyValueFactory property="id" />
+                                <PropertyValueFactory property="id"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="场次">
                             <cellValueFactory>
-                                <PropertyValueFactory property="name" />
+                                <PropertyValueFactory property="name"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="胜">
                             <cellValueFactory>
-                                <PropertyValueFactory property="id" />
+                                <PropertyValueFactory property="id"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="平">
                             <cellValueFactory>
-                                <PropertyValueFactory property="name" />
+                                <PropertyValueFactory property="name"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="负">
                             <cellValueFactory>
-                                <PropertyValueFactory property="id" />
+                                <PropertyValueFactory property="id"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="进球">
                             <cellValueFactory>
-                                <PropertyValueFactory property="name" />
+                                <PropertyValueFactory property="name"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="失球">
                             <cellValueFactory>
-                                <PropertyValueFactory property="id" />
+                                <PropertyValueFactory property="id"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="净胜球">
                             <cellValueFactory>
-                                <PropertyValueFactory property="name" />
+                                <PropertyValueFactory property="name"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="场均进球">
                             <cellValueFactory>
-                                <PropertyValueFactory property="id" />
+                                <PropertyValueFactory property="id"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="场均失球">
                             <cellValueFactory>
-                                <PropertyValueFactory property="name" />
+                                <PropertyValueFactory property="name"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="场均净胜">
                             <cellValueFactory>
-                                <PropertyValueFactory property="name" />
+                                <PropertyValueFactory property="name"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="场均积分">
                             <cellValueFactory>
-                                <PropertyValueFactory property="name" />
+                                <PropertyValueFactory property="name"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="积分">
                             <cellValueFactory>
-                                <PropertyValueFactory property="name" />
+                                <PropertyValueFactory property="name"/>
                             </cellValueFactory>
                         </TableColumn>
                     </columns>
                 </TableView>
-            <ComboBox fx:id="subGroupType" layoutX="138.0" layoutY="14.0" prefHeight="30.0" prefWidth="100.0" />
-            <Button layoutX="260.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="102.0" text="加载排行榜" />
+                <ComboBox fx:id="subGroupType" layoutX="138.0" layoutY="14.0" prefHeight="30.0" prefWidth="100.0"/>
+                <Button layoutX="260.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="102.0"
+                        text="加载排行榜"/>
             </AnchorPane>
         </Tab>
     </TabPane>
+    <ProgressBar fx:id="progressBar" layoutX="14.0" layoutY="613.0" prefHeight="18.0" prefWidth="1176.0" progress="0.0"
+                 AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"/>
+    <Label fx:id="status" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="10.0"/>
 </AnchorPane>

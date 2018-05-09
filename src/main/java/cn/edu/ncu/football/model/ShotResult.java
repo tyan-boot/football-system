@@ -4,17 +4,15 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-@Data
 @Entity
-public class Player {
+@Data
+public class ShotResult {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private String name;
+    @OneToOne
+    private Player player;
 
-    private String grander;
-
-    @ManyToOne(cascade = {CascadeType.MERGE})
-    private Team team;
+    private Integer shotCount;
 }
