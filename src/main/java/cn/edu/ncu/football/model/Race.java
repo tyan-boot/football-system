@@ -25,8 +25,14 @@ public class Race {
 
     private Date holdDate;
 
+    @OneToOne(cascade = {CascadeType.MERGE})
+    private RaceResults raceResults;
+
     @Convert(converter = StatusConverter.class)
     private RaceStatus status;
+
+    @OneToOne
+    private Place place;
 
     public static enum RaceStatus {
         PENDING(1, "未举行"),

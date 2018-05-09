@@ -4,6 +4,9 @@ import cn.edu.ncu.football.model.Team;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface TeamRepo extends CrudRepository<Team, Integer> {
+    List<Team> findTeamByType(Integer type);
 }
