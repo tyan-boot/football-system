@@ -11,6 +11,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.*;
 
 @Component
@@ -52,6 +53,11 @@ public class FakeDataGenerator {
         this.placeRepo = placeRepo;
     }
 
+    private void increaseProgress() {
+        progress += step;
+        mainController.progressBar.setProgress(progress);
+    }
+
     public void run(Main mainController) throws Exception {
         this.mainController = mainController;
 
@@ -83,14 +89,13 @@ public class FakeDataGenerator {
             mainController.progressBar.setProgress(1);
             mainController.status.setText("初始化完成");
         });
-        
+
         logger.info("Data initialized.");
     }
 
     @Transactional
     protected void generateTeam() {
         Random random = new Random();
-
         // create team
         for (int i = 0; i < 72; ++i) {
             Team team = new Team();
@@ -98,17 +103,14 @@ public class FakeDataGenerator {
             team.setType(random.nextInt(4));
             teams.add(team);
 
-            progress += step;
-            mainController.progressBar.setProgress(progress);
+            teamRepo.save(team);
+
+            increaseProgress();
         }
-        teamRepo.saveAll(teams);
     }
 
     @Transactional
     protected void generatePlayer() {
-        teams.clear();
-        teamRepo.findAll().forEach(teams::add);
-
         // create player
         for (int i = 0; i < 792; ++i) {
             Player player = new Player();
@@ -117,22 +119,17 @@ public class FakeDataGenerator {
             player.setName("Player " + i);
             player.setGrander("f");
             player.setTeam(team);
+            team.getPlayers().add(player);
+
             players.add(player);
 
-            progress += step;
-            mainController.progressBar.setProgress(progress);
+            playerRepo.save(player);
+
+            increaseProgress();
         }
-        playerRepo.saveAll(players);
     }
 
-    @Transactional
     public void generateRace() {
-        teams.clear();
-        players.clear();
-
-        teamRepo.findAll().forEach(teams::add);
-        playerRepo.findAll().forEach(players::add);
-
         Random random = new Random();
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, 2018);
@@ -174,8 +171,7 @@ public class FakeDataGenerator {
 
                     raceRepo.save(race);
 
-                    progress += step;
-                    mainController.progressBar.setProgress(progress);
+                    increaseProgress();
                 }
             }
         }
@@ -185,6 +181,7 @@ public class FakeDataGenerator {
         Random random = new Random();
 
         RaceResults raceResult = new RaceResults();
+        raceResultRepo.save(raceResult);
 
         Team team1 = race.getTeam1();
         Team team2 = race.getTeam2();
@@ -202,13 +199,12 @@ public class FakeDataGenerator {
         }
 
         raceResultRepo.save(raceResult);
-        progress += step;
-        mainController.progressBar.setProgress(progress);
+
+        increaseProgress();
 
         return raceResult;
     }
 
-    @Transactional
     protected Integer generateShotResult(Random random, Team team, RaceResults raceResults) {
         List<Player> players = playerRepo.findByTeam(team);
         Integer totalCount = 0;
@@ -216,17 +212,18 @@ public class FakeDataGenerator {
         for (Player player : players) {
             ShotResult shotResult = new ShotResult();
             shotResult.setPlayer(player);
+            shotResult.setRaceResult(raceResults);
 
             Integer count = random.nextInt(3);
             totalCount += count;
 
             shotResult.setShotCount(count);
+
             raceResults.getShotResults().add(shotResult);
 
             shotResultRepo.save(shotResult);
 
-            progress += step;
-            mainController.progressBar.setProgress(progress);
+            increaseProgress();
         }
 
         return totalCount;
@@ -239,7 +236,6 @@ public class FakeDataGenerator {
         return arrayList;
     }
 
-    @Transactional
     public void generatePlace() {
         for (int i = 0; i < 10; ++i) {
             Place place = new Place();
@@ -248,8 +244,7 @@ public class FakeDataGenerator {
             places.add(place);
             placeRepo.save(place);
 
-            progress += step;
-            mainController.progressBar.setProgress(progress);
+            increaseProgress();
         }
     }
 }

@@ -1,10 +1,15 @@
 package cn.edu.ncu.football.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Data
+@ToString(exclude = "team")
+@EqualsAndHashCode(exclude = "team")
 @Entity
 public class Player {
     @Id
@@ -15,6 +20,6 @@ public class Player {
 
     private String grander;
 
-    @ManyToOne(cascade = {CascadeType.MERGE})
+    @ManyToOne
     private Team team;
 }

@@ -10,7 +10,8 @@ import javax.persistence.Converter;
 public class ResultConverter implements AttributeConverter<RaceResult, Integer> {
     @Override
     public Integer convertToDatabaseColumn(RaceResult attribute) {
-        return attribute.getValue();
+        if (attribute == null) return RaceResult.NULL.getValue();
+        else return attribute.getValue();
     }
 
     @Override

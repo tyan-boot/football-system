@@ -2,7 +2,9 @@ package cn.edu.ncu.football.model;
 
 import cn.edu.ncu.football.ResultConverter;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -15,6 +17,8 @@ import java.util.Set;
 
 @Entity
 @Data
+@ToString(exclude = "shotResults")
+@EqualsAndHashCode(exclude = "shotResults")
 public class RaceResults {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,14 +27,14 @@ public class RaceResults {
     @Convert(converter = ResultConverter.class)
     private RaceResult result;
 
-    @OneToMany(cascade = {CascadeType.MERGE})
-    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(mappedBy = "raceResult")
     private Set<ShotResult> shotResults = new HashSet<>();
 
     public static enum RaceResult {
         WIN(1, "胜"),
         LOSE(2, "输"),
-        DRAW(3, "平");
+        DRAW(3, "平"),
+        NULL(4, "默认");
 
         @Getter
         private Integer value;

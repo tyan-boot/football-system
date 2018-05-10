@@ -67,6 +67,7 @@ public class App extends Application {
                 fakeDataGenerator.run(mainController);
             } catch (Exception e) {
                 System.err.println(e.getMessage());
+                e.printStackTrace();
                 System.exit(-1);
             }
         }
