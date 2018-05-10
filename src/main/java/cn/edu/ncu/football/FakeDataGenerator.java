@@ -30,6 +30,8 @@ public class FakeDataGenerator {
 
     private final PlaceRepo placeRepo;
 
+    private final JudgeRepo judgeRepo;
+
     private ArrayList<Team> teams = new ArrayList<>();
 
     private ArrayList<Player> players = new ArrayList<>();
@@ -43,7 +45,7 @@ public class FakeDataGenerator {
     private final Double step = 0.000062992;
 
     @Autowired
-    public FakeDataGenerator(TeamRepo teamRepo, PlayerRepo playerRepo, RaceRepo raceRepo, RaceResultRepo raceResultRepo, ShotResultRepo shotResultRepo, PlaceRepo placeRepo) {
+    public FakeDataGenerator(TeamRepo teamRepo, PlayerRepo playerRepo, RaceRepo raceRepo, RaceResultRepo raceResultRepo, ShotResultRepo shotResultRepo, PlaceRepo placeRepo, JudgeRepo judgeRepo) {
         this.teamRepo = teamRepo;
         this.playerRepo = playerRepo;
         this.raceRepo = raceRepo;
@@ -51,6 +53,7 @@ public class FakeDataGenerator {
         this.raceResultRepo = raceResultRepo;
         this.shotResultRepo = shotResultRepo;
         this.placeRepo = placeRepo;
+        this.judgeRepo = judgeRepo;
     }
 
     private void increaseProgress() {
@@ -58,6 +61,7 @@ public class FakeDataGenerator {
         mainController.progressBar.setProgress(progress);
     }
 
+    @Transactional
     public void run(Main mainController) throws Exception {
         this.mainController = mainController;
 
@@ -129,7 +133,7 @@ public class FakeDataGenerator {
         }
     }
 
-    public void generateRace() {
+    private void generateRace() {
         Random random = new Random();
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR, 2018);
@@ -205,7 +209,7 @@ public class FakeDataGenerator {
         return raceResult;
     }
 
-    protected Integer generateShotResult(Random random, Team team, RaceResults raceResults) {
+    private Integer generateShotResult(Random random, Team team, RaceResults raceResults) {
         List<Player> players = playerRepo.findByTeam(team);
         Integer totalCount = 0;
 
@@ -236,15 +240,28 @@ public class FakeDataGenerator {
         return arrayList;
     }
 
-    public void generatePlace() {
+    private void generatePlace() {
         for (int i = 0; i < 10; ++i) {
             Place place = new Place();
             place.setName("Place " + i);
+
+            place.setJudge(generateJudge(1));
+            place.setAssistJudge(generateJudge(2));
+            place.setAssistJudge2(generateJudge(3));
 
             places.add(place);
             placeRepo.save(place);
 
             increaseProgress();
         }
+    }
+
+    private Judge generateJudge(Integer i) {
+        Judge judge = new Judge();
+        judge.setName("Judge " + i);
+        judge.setGrander("f");
+
+        judgeRepo.save(judge);
+        return judge;
     }
 }

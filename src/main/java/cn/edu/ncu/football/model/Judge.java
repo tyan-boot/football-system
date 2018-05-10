@@ -16,8 +16,5 @@ public class Judge {
 
     private String name;
 
-    private String grander;//性别
-
-    @OneToOne
-    private Team team;
+    private String grander;  //性别
 }
