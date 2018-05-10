@@ -35,6 +35,7 @@ public class App extends Application {
         Scene scene = new Scene(root, 1200, 480);
 
         primaryStage.setScene(scene);
+        primaryStage.setTitle("FootBall Match");
         primaryStage.setMinWidth(1200);
         primaryStage.show();
 

@@ -35,6 +35,12 @@ public class Main {
     public Label status;
 
     @FXML
+    public ComboBox<String> calenderTeam;
+
+    @FXML
+    public ComboBox<String> calenderPlay;
+
+    @FXML
     private TableView<Player> playerTableView;
 
     private final PlayerRepo repo;
@@ -71,8 +77,12 @@ public class Main {
             }
         });
 
-        subGroupType.setPromptText("男子组");
+        subGroupType.setPromptText("男子甲组");
         subGroupType.getItems().addAll("男子甲组", "男子乙组", "女子组");
+        calenderTeam.setPromptText("4.1");
+        calenderTeam.getItems().addAll("4.1","4.2","4.3","4.4","4.5","4.6","4.7","4.8","4.9","4.10","4.11","4.12","4.13","4.14","4.15","4.16","4.17","4.18","4.19","4.20","4.21","4.22","4.23","4.24","4.25","4.26");
+        calenderPlay.setPromptText("4.1");
+        calenderPlay.getItems().addAll("4.1","4.2","4.3","4.4","4.5","4.6","4.7","4.8","4.9","4.10","4.11","4.12","4.13","4.14","4.15","4.16","4.17","4.18","4.19","4.20","4.21","4.22","4.23","4.24","4.25","4.26");
     }
 
     @FXML
