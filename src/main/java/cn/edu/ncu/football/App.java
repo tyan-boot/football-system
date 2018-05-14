@@ -2,7 +2,6 @@ package cn.edu.ncu.football;
 
 import cn.edu.ncu.football.controller.Main;
 import javafx.application.Application;
-import javafx.application.Preloader;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
