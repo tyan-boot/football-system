@@ -58,108 +58,108 @@
         </Tab>
         <Tab text="球队实时积分榜">
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                <TableView fx:id="teamTableView" layoutY="63.0" prefHeight="481.0" prefWidth="855.0"
+                <TableView fx:id="rankTableView" layoutY="63.0" prefHeight="481.0" prefWidth="855.0"
                            AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                            AnchorPane.topAnchor="60.0">
                     <columns>
                         <TableColumn prefWidth="75.0" text="排名">
                             <cellValueFactory>
-                                <PropertyValueFactory property="id"/>
+                                <PropertyValueFactory property="rank"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="升降">
                             <cellValueFactory>
-                                <PropertyValueFactory property="name"/>
+                                <PropertyValueFactory property="diff"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="球队名">
                             <cellValueFactory>
-                                <PropertyValueFactory property="id"/>
+                                <PropertyValueFactory property="teamName"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="场次">
                             <cellValueFactory>
-                                <PropertyValueFactory property="name"/>
+                                <PropertyValueFactory property="race"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="胜">
                             <cellValueFactory>
-                                <PropertyValueFactory property="id"/>
+                                <PropertyValueFactory property="win"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="平">
                             <cellValueFactory>
-                                <PropertyValueFactory property="name"/>
+                                <PropertyValueFactory property="draw"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="负">
                             <cellValueFactory>
-                                <PropertyValueFactory property="id"/>
+                                <PropertyValueFactory property="lose"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="进球">
                             <cellValueFactory>
-                                <PropertyValueFactory property="name"/>
+                                <PropertyValueFactory property="inCount"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="失球">
                             <cellValueFactory>
-                                <PropertyValueFactory property="id"/>
+                                <PropertyValueFactory property="lostCount"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="净胜球">
                             <cellValueFactory>
-                                <PropertyValueFactory property="name"/>
+                                <PropertyValueFactory property="pureInCount"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="场均进球">
                             <cellValueFactory>
-                                <PropertyValueFactory property="id"/>
+                                <PropertyValueFactory property="avgInCount"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="场均失球">
                             <cellValueFactory>
-                                <PropertyValueFactory property="name"/>
+                                <PropertyValueFactory property="avgLostCount"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="场均净胜">
                             <cellValueFactory>
-                                <PropertyValueFactory property="name"/>
+                                <PropertyValueFactory property="avgPrueWin"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="场均积分">
                             <cellValueFactory>
-                                <PropertyValueFactory property="name"/>
+                                <PropertyValueFactory property="avgPoint"/>
                             </cellValueFactory>
                         </TableColumn>
 
                         <TableColumn prefWidth="75.0" text="积分">
                             <cellValueFactory>
-                                <PropertyValueFactory property="name"/>
+                                <PropertyValueFactory property="point"/>
                             </cellValueFactory>
                         </TableColumn>
                     </columns>
                 </TableView>
-                <ComboBox fx:id="groupType" layoutX="14.0" layoutY="14.0" prefHeight="30.0" prefWidth="100.0">
-
-                </ComboBox>
+                <ComboBox fx:id="groupType" layoutX="14.0" layoutY="14.0" prefHeight="30.0" prefWidth="100.0"/>
                 <ComboBox fx:id="subGroupType" disable="true" layoutX="138.0" layoutY="14.0" prefHeight="30.0"
                           prefWidth="100.0"/>
-                <Button layoutX="385.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="102.0"
-                        text="加载排行榜"/>
+
+                <Button layoutX="385.0" layoutY="14.0" mnemonicParsing="false" prefHeight="30.0"
+                        prefWidth="102.0" text="加载排行榜" onMouseClicked="#loadRank"/>
+
                 <ComboBox fx:id="calenderTeam" layoutX="260.0" layoutY="14.0" prefHeight="30.0" prefWidth="100.0">
                 </ComboBox>
             </AnchorPane>
