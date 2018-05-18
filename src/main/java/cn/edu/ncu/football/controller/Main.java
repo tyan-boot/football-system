@@ -1,12 +1,12 @@
 package cn.edu.ncu.football.controller;
 
-import cn.edu.ncu.football.model.PointRank;
-import cn.edu.ncu.football.model.ShotRank;
-import cn.edu.ncu.football.repo.PlayerRepo;
+import cn.edu.ncu.football.model.*;
+import cn.edu.ncu.football.repo.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -16,8 +16,8 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 @Service
@@ -51,23 +51,35 @@ public class Main {
 
     private final PlayerRepo repo;
 
+    private final TeamRepo teamRepo;
+
+    private final RaceRepo raceRepo;
+
+    private final RaceResultRepo raceResultRepo;
+
+    private final ShotResultRepo shotResultRepo;
+
     @Autowired
-    public Main(PlayerRepo repo, JdbcTemplate jdbcTemplate, EntityManager entityManager) {
+    public Main(PlayerRepo repo, JdbcTemplate jdbcTemplate, EntityManager entityManager, TeamRepo teamRepo, RaceRepo raceRepo, RaceResultRepo raceResultRepo, ShotResultRepo shotResultRepo) {
         this.repo = repo;
         this.jdbcTemplate = jdbcTemplate;
         this.entityManager = entityManager;
+        this.teamRepo = teamRepo;
+        this.raceRepo = raceRepo;
+        this.raceResultRepo = raceResultRepo;
+        this.shotResultRepo = shotResultRepo;
     }
 
     private final JdbcTemplate jdbcTemplate;
 
     private final EntityManager entityManager;
 
-    private Map<String, ObservableList<PointRank>> ranks = new HashMap<>();
+    private List<Map<String, ObservableList<PointRank>>> ranks = new ArrayList<>();
 
     @FXML
     public void initialize() {
-        groupType.setPromptText("成年组");
         groupType.getItems().addAll("成年组", "校园组");
+        groupType.getSelectionModel().select(0);
 
         groupType.valueProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -80,14 +92,18 @@ public class Main {
             }
         });
 
-        subGroupType.setPromptText("男子甲组");
         subGroupType.getItems().addAll("男子甲组", "男子乙组", "女子组");
+        subGroupType.getSelectionModel().select(0);
 
-        calenderTeam.getItems().addAll("5.1", "5.2", "5.3", "5.4", "5.5", "5.6", "5.7", "5.8", "5.9", "5.10", "5.11", "5.12", "5.13", "5.14", "5.15", "5.16", "5.17", "5.18", "5.19", "5.20", "5.21", "5.22", "5.23", "5.24", "5.25", "5.26");
-        calenderPlay.getItems().addAll("5.1", "5.2", "5.3", "5.4", "5.5", "5.6", "5.7", "5.8", "5.9", "5.10", "5.11", "5.12", "5.13", "5.14", "5.15", "5.16", "5.17", "5.18", "5.19", "5.20", "5.21", "5.22", "5.23", "5.24", "5.25", "5.26");
+        calenderPlay.getItems().addAll("5.1", "5.2", "5.3", "5.4", "5.5", "5.6", "5.7", "5.8", "5.9", "5.10", "5.11", "5.12", "5.13", "5.14", "5.15", "5.16", "5.17", "5.18", "5.19", "5.20", "5.21", "5.22", "5.23", "5.24", "5.25", "5.26", "5.27", "5.28", "5.29", "5.30", "5.31");
+        calenderTeam.getItems().addAll("5.1", "5.2", "5.3", "5.4", "5.5", "5.6", "5.7", "5.8", "5.9", "5.10", "5.11", "5.12", "5.13", "5.14", "5.15", "5.16", "5.17", "5.18", "5.19", "5.20", "5.21", "5.22", "5.23", "5.24", "5.25", "5.26", "5.27", "5.28", "5.29", "5.30", "5.31");
 
         calenderTeam.getSelectionModel().select(0);
         calenderPlay.getSelectionModel().select(0);
+
+        for (int i = 0; i < 4; ++i) {
+            ranks.add(new HashMap<>());
+        }
     }
 
     @FXML
@@ -147,10 +163,183 @@ public class Main {
         playerTableView.setItems(observableList);
     }
 
+    private ObservableList<PointRank> loadRankData(Integer day, Integer type) {
+        if (ranks.get(type).containsKey("5." + day)) {
+            return ranks.get(type).get("5." + day);
+        }
+
+        List<Team> teams = teamRepo.findTeamByType(type);
+
+        LocalDate localDate = LocalDate.of(2018, 5, day);
+
+        Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        ObservableList<PointRank> r = FXCollections.observableArrayList();
+        ObservableList<PointRank> prevData = FXCollections.observableArrayList();
+
+        if (day > 1) {
+            prevData = loadRankData(day - 1, type);
+        }
+
+        for (Team team : teams) {
+            Integer raceCount = 0,
+                    win = 0,
+                    draw = 0,
+                    lose = 0,
+                    inCount = 0,
+                    lostCount = 0,
+                    point = 0,
+                    diff = 0;
+
+            if (day > 1) {
+                PointRank pointRank1 = prevData.filtered(pointRank -> pointRank.getTeamName().equals(team.getName())).get(0);
+
+                raceCount += pointRank1.getRace();
+                win += pointRank1.getWin();
+                draw += pointRank1.getDraw();
+                lose += pointRank1.getLose();
+                inCount += pointRank1.getInCount();
+                lostCount += pointRank1.getLostCount();
+                point += pointRank1.getPoint();
+            }
+
+            List<Race> race1 = raceRepo.findByTeam1IdAndHoldDate(team.getId(), date);
+            List<Race> race2 = raceRepo.findByTeam2IdAndHoldDate(team.getId(), date);
+
+            PointRank pointRank = new PointRank();
+            pointRank.setTeamName(team.getName());
+
+            for (Race race : race1) {
+                RaceResults raceResults = race.getRaceResults();
+                switch (raceResults.getResult()) {
+                    case WIN:
+                        win++;
+                        point += 3;
+                        break;
+                    case LOSE:
+                        lose++;
+                    case DRAW:
+                        point++;
+                        draw++;
+                }
+                raceCount++;
+
+                Set<ShotResult> shotResults = raceResults.getShotResults();
+
+                for (ShotResult shotResult : shotResults) {
+                    Player player = shotResult.getPlayer();
+
+                    if (player.getTeam().equals(team)) {
+                        inCount += shotResult.getShotCount();
+                    } else {
+                        lostCount += shotResult.getShotCount();
+                    }
+                }
+            }
+
+            for (Race race : race2) {
+                RaceResults raceResults = race.getRaceResults();
+                switch (raceResults.getResult()) {
+                    case WIN:
+                        lose++;
+                        point += 1;
+                        break;
+                    case LOSE:
+                        win++;
+                        point += 3;
+                    case DRAW:
+                        point++;
+                        draw++;
+                }
+                raceCount++;
+
+                Set<ShotResult> shotResults = raceResults.getShotResults();
+
+                for (ShotResult shotResult : shotResults) {
+                    Player player = shotResult.getPlayer();
+
+                    if (player.getTeam().equals(team)) {
+                        inCount += shotResult.getShotCount();
+                    } else {
+                        lostCount += shotResult.getShotCount();
+                    }
+                }
+            }
+
+            pointRank.setRace(raceCount);
+            pointRank.setWin(win);
+            pointRank.setDraw(draw);
+            pointRank.setLose(lose);
+            pointRank.setInCount(inCount);
+            pointRank.setLostCount(lostCount);
+            pointRank.setPureInCount(inCount - lostCount);
+            pointRank.setAvgInCount(inCount.doubleValue() / raceCount.doubleValue());
+            pointRank.setAvgLostCount(lostCount.doubleValue() / raceCount.doubleValue());
+            pointRank.setAvgPrueWin((win - lose) / raceCount.doubleValue());
+            pointRank.setAvgPoint(point.doubleValue() / raceCount.doubleValue());
+            pointRank.setPoint(point);
+
+            r.add(pointRank);
+        }
+
+        r.sort((o1, o2) -> o2.getPoint() - o1.getPoint());
+
+        Integer rank = 1;
+
+        for (PointRank pr : r) {
+            pr.setRank(rank++);
+
+            FilteredList<PointRank> filtered = prevData.filtered(it -> it.getTeamName().equals(pr.getTeamName()));
+
+            if (!filtered.isEmpty()) {
+                PointRank prevRank = filtered.get(0);
+                pr.setDiff(prevRank.getRank() - pr.getRank());
+            } else {
+                pr.setDiff(0);
+            }
+        }
+
+        ranks.get(type).put("5." + day, r);
+        return r;
+    }
+
     @FXML
     public void loadRank(MouseEvent event) {
-        if (ranks.isEmpty()) {
-            String sql = "select\n" +
+        String[] split = calenderTeam.getSelectionModel().getSelectedItem().split("\\.");
+        Integer day = Integer.valueOf(split[1]);
+
+        Integer type = 0;
+
+        if (groupType.getSelectionModel().getSelectedItem().equals("成年组")) {
+            type = 3;
+        } else {
+            String subType = subGroupType.getSelectionModel().getSelectedItem();
+
+            switch (subType) {
+                case "男子甲组":
+                    type = 0;
+                    break;
+                case "男子乙组":
+                    type = 1;
+                    break;
+                case "女子组":
+                    type = 2;
+                    break;
+            }
+        }
+
+        if (ranks.get(type).containsKey("5." + day)) {
+            rankTableView.setItems(ranks.get(type).get("5." + day));
+        } else {
+            ObservableList<PointRank> r = loadRankData(day, type);
+            ranks.get(type).put("5." + day, r);
+            rankTableView.setItems(r);
+        }
+//        rankTableView.setItems(r);
+
+        System.out.println(ranks);
+
+            /*String sql = "select\n" +
                     "  team.name                                        as teamName,\n" +
                     "  ifnull(T1.racecount, 0)                          as race,\n" +
                     "  ifnull(T1.win, 0)                                as win,\n" +
@@ -223,7 +412,7 @@ public class Main {
                     pointRank.setDraw(Integer.valueOf(String.valueOf(item.get("draw"))));
                     pointRank.setInCount(Integer.valueOf(String.valueOf(item.get("inCount"))));
                     pointRank.setLostCount(Integer.valueOf(String.valueOf(item.get("lostCount"))));
-                    pointRank.setPrueInCount(Integer.valueOf(String.valueOf(item.get("pureInCount"))));
+                    pointRank.setPureInCount(Integer.valueOf(String.valueOf(item.get("pureInCount"))));
                     pointRank.setAvgInCount(Double.valueOf(String.valueOf(item.get("avgInCount"))));
                     pointRank.setAvgLostCount(Double.valueOf(String.valueOf(item.get("avgLostCount"))));
                     pointRank.setAvgPrueWin(Double.valueOf(String.valueOf(item.get("avgPrueWin"))));
@@ -234,9 +423,9 @@ public class Main {
                 }
 
                 ranks.put("5." + day, r);
-            }
-        }
-
-        rankTableView.setItems(ranks.get(calenderTeam.getSelectionModel().getSelectedItem()));
+            }*/
     }
+
+//        rankTableView.setItems(ranks.get(calenderTeam.getSelectionModel().getSelectedItem()));
+
 }

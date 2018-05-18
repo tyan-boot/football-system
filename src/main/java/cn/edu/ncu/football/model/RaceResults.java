@@ -27,7 +27,7 @@ public class RaceResults {
     @Convert(converter = ResultConverter.class)
     private RaceResult result;
 
-    @OneToMany(mappedBy = "raceResult")
+    @OneToMany(mappedBy = "raceResult", fetch = FetchType.EAGER)
     private Set<ShotResult> shotResults = new HashSet<>();
 
     public static enum RaceResult {

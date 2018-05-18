@@ -22,7 +22,7 @@ public class PointRank {
 
     private Integer lostCount;
 
-    private Integer prueInCount;
+    private Integer pureInCount;
 
     private Double avgInCount;
 
