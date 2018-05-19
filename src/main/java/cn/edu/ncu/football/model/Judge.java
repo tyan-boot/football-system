@@ -4,21 +4,17 @@ import lombok.Data;
 
 import javax.persistence.*;
 
+/**
+ * 主裁判
+ */
 @Data
 @Entity
-public class Place {
+public class Judge {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     private String name;
 
-    @OneToOne
-    private Judge judge;
-
-    @OneToOne
-    private Judge assistJudge;
-
-    @OneToOne
-    private Judge assistJudge2;
+    private String grander;  //性别
 }

@@ -2,7 +2,6 @@ package cn.edu.ncu.football;
 
 import cn.edu.ncu.football.controller.Main;
 import javafx.application.Application;
-import javafx.application.Preloader;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -35,6 +34,7 @@ public class App extends Application {
         Scene scene = new Scene(root, 1200, 480);
 
         primaryStage.setScene(scene);
+        primaryStage.setTitle("FootBall Match");
         primaryStage.setMinWidth(1200);
         primaryStage.show();
 
@@ -66,6 +66,7 @@ public class App extends Application {
                 fakeDataGenerator.run(mainController);
             } catch (Exception e) {
                 System.err.println(e.getMessage());
+                e.printStackTrace();
                 System.exit(-1);
             }
         }

@@ -20,9 +20,6 @@ public class Race {
     @OneToOne
     private Team team2;
 
-    @OneToOne
-    private Player judge;
-
     private Date holdDate;
 
     @OneToOne(cascade = {CascadeType.MERGE})
